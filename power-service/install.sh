@@ -5,8 +5,7 @@ if [[ $EUID -ne 0 ]]; then
 	exit 1
 fi
 
-chmod a+x mpu-power-daemon.py
-cp mpu-power-daemon.py /usr/local/bin/
+install --mode 0755  mpu-power-daemon.py /usr/local/bin/
 cp mpu-power-daemon.service /etc/systemd/system/
 systemctl unmask mpu-power-daemon.service
 systemctl enable mpu-power-daemon.service
