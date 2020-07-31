@@ -47,6 +47,7 @@ def quectel_poweronoff():
 
 def main():
     quectel_poweronoff()
+    GPIO.output(PIN_AP_READY,GPIO.LOW)
     time.sleep(1)  
     is_on = 0
     GPIO.setup(PIN_USER_LED, GPIO.OUT) 
