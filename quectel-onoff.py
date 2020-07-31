@@ -11,6 +11,7 @@ PIN_RESET=22      # High reset
 PIN_WAKEUP_IN=11
 PIN_ANTENNA=16   # VDD_ANT_GNSS_EN
 PIN_AP_READY=13
+PIN_USER_LED=26
 MODEM_TTY="/dev/ttyUSB3"
 
 def quectel_poweronoff():
@@ -24,7 +25,6 @@ def quectel_poweronoff():
     GPIO.setup(PIN_WAKEUP_IN, GPIO.OUT) 
     GPIO.setup(PIN_ANTENNA, GPIO.OUT) 
     GPIO.setup(PIN_AP_READY, GPIO.OUT) 
-    
     # enable GNSS ANTENNA power
     GPIO.output(PIN_ANTENNA,GPIO.LOW)
     # enable  LTE 5V
@@ -47,9 +47,9 @@ def quectel_poweronoff():
 
 def main():
     quectel_poweronoff()
-    GPIO.output(PIN_AP_READY,GPIO.LOW)
     time.sleep(1)  
     is_on = 0
+    GPIO.setup(PIN_USER_LED, GPIO.OUT) 
     if not os.path.exists(MODEM_TTY):
         is_on = 1
     if not is_on == 0:
@@ -57,12 +57,14 @@ def main():
         while not os.path.exists(MODEM_TTY):
             pass
         print("OK")
+        GPIO.output(PIN_USER_LED,GPIO.HIGH)
         exit(0)
     print("Power off LTE module")
     while os.path.exists(MODEM_TTY):
         pass
     time.sleep(10)
     print("OK")
+    GPIO.output(PIN_USER_LED,GPIO.LOW)
     exit(1)
     
 if __name__ == "__main__":
