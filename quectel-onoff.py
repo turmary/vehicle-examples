@@ -50,7 +50,6 @@ def main():
     GPIO.output(PIN_AP_READY,GPIO.LOW)
     time.sleep(1)  
     is_on = 0
-    GPIO.setup(PIN_USER_LED, GPIO.OUT) 
     if not os.path.exists(MODEM_TTY):
         is_on = 1
     if not is_on == 0:
@@ -58,6 +57,7 @@ def main():
         while not os.path.exists(MODEM_TTY):
             pass
         print("OK")
+        GPIO.setup(PIN_USER_LED, GPIO.OUT) 
         GPIO.output(PIN_USER_LED,GPIO.HIGH)
         exit(0)
     print("Power off LTE module")
@@ -65,6 +65,7 @@ def main():
         pass
     time.sleep(10)
     print("OK")
+    GPIO.setup(PIN_USER_LED, GPIO.OUT) 
     GPIO.output(PIN_USER_LED,GPIO.LOW)
     exit(1)
     
