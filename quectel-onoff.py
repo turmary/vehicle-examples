@@ -61,6 +61,7 @@ def main():
         print("Power on LTE module")
         while not os.path.exists(MODEM_TTY):
             pass
+        time.sleep(30)  
         print("OK")
         GPIO.setup(PIN_USER_LED, GPIO.OUT) 
         GPIO.output(PIN_USER_LED,GPIO.HIGH)
