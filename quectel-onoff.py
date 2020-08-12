@@ -27,8 +27,10 @@ def quectel_poweronoff():
     GPIO.setup(PIN_AP_READY, GPIO.OUT) 
     # enable GNSS ANTENNA power
     GPIO.output(PIN_ANTENNA,GPIO.LOW)
-    # enable  LTE 5V
-    GPIO.setup(PIN_LTE5V_EN,GPIO.HIGH)
+
+    # disable LTE 5V
+    GPIO.output(PIN_LTE5V_EN,GPIO.LOW)
+
     time.sleep(0.2)
     # deassert RESET
     GPIO.output(PIN_RESET,GPIO.LOW)
@@ -44,6 +46,9 @@ def quectel_poweronoff():
     time.sleep(0.6)
     GPIO.output(PIN_PWRKEY,GPIO.LOW)
     time.sleep(0.1)
+    # enable LTE 5V
+    GPIO.output(PIN_LTE5V_EN,GPIO.HIGH)
+
 
 def main():
     quectel_poweronoff()
