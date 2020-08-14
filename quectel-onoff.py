@@ -27,8 +27,10 @@ def quectel_poweronoff():
     GPIO.setup(PIN_AP_READY, GPIO.OUT) 
     # enable GNSS ANTENNA power
     GPIO.output(PIN_ANTENNA,GPIO.LOW)
-    # enable  LTE 5V
-    GPIO.setup(PIN_LTE5V_EN,GPIO.HIGH)
+
+    # disable LTE 5V
+    GPIO.output(PIN_LTE5V_EN,GPIO.LOW)
+
     time.sleep(0.2)
     # deassert RESET
     GPIO.output(PIN_RESET,GPIO.LOW)
@@ -41,9 +43,12 @@ def quectel_poweronoff():
     GPIO.output(PIN_PWRKEY,GPIO.LOW)
     time.sleep(0.1)
     GPIO.output(PIN_PWRKEY,GPIO.HIGH)
-    time.sleep(0.6)
+    time.sleep(0.7)
     GPIO.output(PIN_PWRKEY,GPIO.LOW)
     time.sleep(0.1)
+    # enable LTE 5V
+    GPIO.output(PIN_LTE5V_EN,GPIO.HIGH)
+
 
 def main():
     quectel_poweronoff()
@@ -54,8 +59,12 @@ def main():
         is_on = 1
     if not is_on == 0:
         print("Power on LTE module")
+        # wait for LTE power on
+        time.sleep(13)
         while not os.path.exists(MODEM_TTY):
             pass
+        # wait for LTE work fine
+        time.sleep(10)
         print("OK")
         GPIO.setup(PIN_USER_LED, GPIO.OUT) 
         GPIO.output(PIN_USER_LED,GPIO.HIGH)
@@ -63,7 +72,8 @@ def main():
     print("Power off LTE module")
     while os.path.exists(MODEM_TTY):
         pass
-    time.sleep(10)
+    # wait for LTE power off
+    time.sleep(15)
     print("OK")
     GPIO.setup(PIN_USER_LED, GPIO.OUT) 
     GPIO.output(PIN_USER_LED,GPIO.LOW)
