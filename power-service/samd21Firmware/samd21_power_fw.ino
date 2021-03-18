@@ -9,20 +9,20 @@
 #include <Wire.h>
 #define PIN_RPI_MCU_INT1	8	// PA06
 #define PIN_RPI_MCU_INT2	9	// PA07
-#define PIN_PWR_DET		2	// PA08
+#define PIN_PWR_DET		4	// PA08
 #define PIN_PWR_CONTROL		3	// PA09
 #define PIN_IR_PWR_CONTROL	16	// PB09
 
-#define PIN_MCU_FAN_TACH1	4	// PA14
+#define PIN_MCU_FAN_TACH1	2	// PA14
 #define PIN_MCU_FAN_PWM1	5	// PA15
 #define PIN_MCU_FAN_TACH2	13	// PA17
-#define PIN_MCU_FAN_PWM2	11	// PA16
+#define PIN_MCU_FAN_PWM2	35	// PA16
 
-#define PIN_TEMP_ALERT		7	// PA21
+#define PIN_TEMP_ALERT		39	// PA21
 #define PIN_TEMP_SDA		20	// PA22
 #define PIN_TEMP_SCL		21	// PA23
 
-#define FW_VERSION		"0.2"
+#define FW_VERSION		"0.3"
 
 #define LOOP_PERIOD		10	/* milliseconds */
 
@@ -31,6 +31,8 @@ int int1_last = LOW;
 #define POWER_IR_REG 0X04
 #define POWER_ON_IR 0X01
 #define POWER_OFF_IR 0X00
+
+
 /* MPU Power state machine */
 enum {
 	PW_ST_OFF,
@@ -69,11 +71,11 @@ void setup() {
 	pinMode(PIN_PWR_DET, INPUT_PULLUP);
 	digitalWrite(PIN_RPI_MCU_INT2, LOW);
 	pinMode(PIN_RPI_MCU_INT2, OUTPUT);
-	digitalWrite(PIN_PWR_CONTROL, LOW);
 	pinMode(PIN_PWR_CONTROL, OUTPUT);
+	digitalWrite(PIN_PWR_CONTROL, LOW);
 	pinMode(PIN_IR_PWR_CONTROL, OUTPUT);
 	digitalWrite(PIN_IR_PWR_CONTROL, LOW);
-	Wire.begin(4);                // join i2c bus with address #4
+	Wire.begin(4);// join i2c bus with address #4
 	Wire.onReceive(receiveEvent); // register event
 	// Open serial communications and wait for port to open:
 	Serial.begin(115200);
@@ -241,7 +243,6 @@ int power_do_action(int action, unsigned delta) {
 static unsigned millis_l;
 void loop() {
 	int action = PW_ACT_NONE;
-
 	int int1_stat;
 	int1_stat = smooth_read_int1();
 	if (int1_stat == HIGH && int1_last == LOW) {
